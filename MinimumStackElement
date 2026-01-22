@@ -1,0 +1,52 @@
+import java.util.*;
+class MinStack {
+    static Stack<Integer> st=new Stack<>();;
+    static Stack<Integer> minSt=new Stack<>();
+    
+    static void push(int val) {
+        st.push(val);
+        if(minSt.isEmpty()) minSt.push(val);
+        else if(!minSt.isEmpty() && val<=minSt.peek()) minSt.push(val);
+    }
+    
+    static void pop() {
+        if(!st.isEmpty()) {
+            if(st.peek().equals(minSt.peek())){
+                st.pop();
+                minSt.pop();
+            }
+            else st.pop();
+        }
+
+    }
+    
+    static int top() {
+        return st.peek();
+    }
+    
+    static Integer getMin() {
+        if(!minSt.isEmpty())
+        return minSt.peek();
+        else return null;
+    }
+
+    public static void main(String args[]){
+        Scanner in=new Scanner(System.in);
+        int n=in.nextInt();
+        in.nextLine();
+        while(n>0){
+            String s=in.nextLine();
+            String[] arr=s.split(" ");
+            if(arr[0].equals("push")){
+                push(Integer.parseInt(arr[1]));
+                System.out.print("[]");
+            }
+            else if(arr[0].equals("pop")) System.out.print("[]");
+            else if(arr[0].equals("getMin")) System.out.print("["+getMin()+"]");
+            else if(arr[0].equals("peek")) System.out.print("["+top()+"]");
+            else {System.out.println("Invalid input"); break;}
+            n--;
+        }
+        System.out.println("\nMinimum elemnt: "+getMin());
+    }
+}
