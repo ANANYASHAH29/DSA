@@ -1,0 +1,26 @@
+import java.util.*;
+class Main{
+    static int[] calculateSpan(int[] prices){
+        int n=prices.length;
+        int[] span=new int[n];
+        Stack<Integer> st=new Stack<>();
+        for(int i=0;i<n;i++){
+            while(!st.isEmpty() && prices[st.peek()]<=prices[i]){
+                st.pop();
+            }
+            span[i]=(st.isEmpty()) ? (i+1):(i-st.peek());
+            st.push(i);
+        }
+        return span;
+    }
+    public static void main(String args[]){
+        Scanner in=new Scanner(System.in);
+        int n=in.nextInt();
+        int prices[]=new int[n];
+        for(int i=0;i<n;i++){
+            prices[i]=in.nextInt();
+        }
+        int[] span=calculateSpan(prices);
+        System.out.println(Arrays.toString(span));
+    }
+}
