@@ -1,0 +1,23 @@
+import java.util.*;
+class Main{
+    static int stackPermute(String[] original,String[] target){
+        Stack<String> st=new Stack<>();
+        int c=0,n=original.length;
+        for(int i=0;i<n;i++){
+            st.push(original[i]);
+            while(!st.isEmpty() && c<n && st.peek().equals(target[c])){
+                st.pop();
+                c++;
+            }
+        }
+        return c;
+    }
+    public static void main(String args[]){
+        Scanner in=new Scanner(System.in);
+        String[] original=in.nextLine().split(" ");
+        String[] target=in.nextLine().split(" ");
+        int res=stackPermute(original,target);
+        if(res==original.length) System.out.println("YES");
+        else System.out.println("NO");
+    }
+}
