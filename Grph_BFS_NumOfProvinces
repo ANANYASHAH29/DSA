@@ -1,0 +1,26 @@
+class Solution {
+    public int findCircleNum(int[][] isConnected) {
+        int count=0;
+        int n=isConnected.length;
+        if(n==0) return 0;
+        Queue<Integer> q=new LinkedList<>();
+        boolean[] visited=new boolean[n];
+        for(int i=0;i<n;i++){ //check from all the nodes
+          if(!visited[i]){
+            count++;//a node must have been previously visited if it was connected to some other node
+            q.offer(i);
+            visited[i]=true;
+            while(!q.isEmpty()){
+            int node=q.poll();
+            for(int nei=0;nei<n;nei++){
+                if(isConnected[node][nei]==1 && !visited[nei]){
+                    visited[nei]=true;
+                    q.offer(nei);
+                }
+            }
+        }
+      }
+    }
+        return count;
+    }
+}
