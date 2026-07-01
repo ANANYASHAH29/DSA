@@ -1,0 +1,64 @@
+class Solution {
+    public int maximumSafenessFactor(List<List<Integer>> grid) {
+        int n=grid.size();
+        if(grid.get(0).get(0)==1 || grid.get(n-1).get(n-1)==1) return 0;
+        int[][] dp=new int[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                dp[i][j]=-1;
+            }
+        }
+        Queue<int[]> q=new LinkedList<>();
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                if(grid.get(i).get(j)==1){
+                    q.offer(new int[]{i,j});
+                    dp[i][j]=0;
+                }
+            }
+        }
+        int[][] dirs={{1,0},{-1,0},{0,1},{0,-1}};
+    
+        while(!q.isEmpty()){
+            int[] node=q.poll();
+            int r=node[0]; 
+            int c=node[1];
+            for(int[] d:dirs){
+                int nr=r+d[0];
+                int nc=c+d[1];
+                if(nr>=0 && nc>=0 && nr<n && nc<n){
+                    if(dp[nr][nc]==-1){
+                    q.offer(new int[]{nr,nc});
+                    dp[nr][nc]=dp[r][c]+1;
+                    }
+                }
+            }
+        }
+        PriorityQueue<int[]> pq=new PriorityQueue<>(
+            (a,b)->b[0]-a[0]
+        );
+         boolean[][] visited=new boolean[n][n];
+        pq.offer(new int[]{dp[0][0],0,0});
+        while(!pq.isEmpty()){
+            int[] node=pq.poll();
+            int factor=node[0];
+            int r=node[1];
+            int c=node[2];
+            if(r==n-1 && c==n-1) return factor;
+            if(visited[r][c]) continue;
+            visited[r][c]=true;
+            for(int[] d:dirs){
+                int nr=r+d[0];
+                int nc=c+d[1];
+                if(nr>=0 && nc>=0 && nr<n && nc<n){
+                    if(!visited[nr][nc]){
+                    int newFactor=Math.min(factor,dp[nr][nc]);
+                    pq.offer(new int[]{newFactor,nr,nc});
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+}
+
