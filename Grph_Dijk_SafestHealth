@@ -1,0 +1,37 @@
+class Solution {
+    public boolean findSafeWalk(List<List<Integer>> grid, int health) {
+        PriorityQueue<int[]> pq=new PriorityQueue<>(
+            (a,b)->b[2]-a[2]
+        );
+        int m=grid.size();
+        int n=grid.get(0).size();
+        pq.offer(new int[]{0,0,health});
+        int[][] dirs={{1,0},{-1,0},{0,1},{0,-1}};
+        boolean[][] visited=new boolean[m][n];
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                visited[i][j]=false;
+            }
+        }
+        while(!pq.isEmpty()){
+            int[] node=pq.poll();
+            int r=node[0];
+            int c=node[1];
+            int h=node[2];
+            if(visited[r][c]) continue;
+            visited[r][c]=true;
+            if(grid.get(r).get(c)==1) h--;
+            if(r==m-1 && c==n-1 && h>=1) return true;
+            for(int[] d:dirs){
+                int nr=r+d[0];
+                int nc=c+d[1];
+                if(nr>=0 && nc>=0 && nr<m && nc<n){
+                    if(h>=1){
+                    pq.offer(new int[]{nr,nc,h});
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
