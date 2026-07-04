@@ -1,0 +1,34 @@
+class Solution {
+    public int minScore(int n, int[][] roads) {
+        List<List<int[]>> adj=new ArrayList<>();
+        for(int i=0;i<=n;i++){
+            adj.add(new ArrayList<>());
+        }
+        for(int[] road:roads){
+            int u=road[0];
+            int v=road[1];
+            int w=road[2];
+            adj.get(u).add(new int[]{v,w});
+            adj.get(v).add(new int[]{u,w});
+        }
+        boolean[] visited=new boolean[n+1];
+        Queue<int[]> q=new LinkedList<>();
+        q.offer(new int[]{1,0});
+        visited[1]=true;
+        int minDist=Integer.MAX_VALUE;
+        while(!q.isEmpty()){
+            int[] node=q.poll();
+            int u=node[0];
+            for(int[] nei:adj.get(u)){
+                int v=nei[0];
+                int w=nei[1];
+                minDist=Math.min(minDist,w);
+                if(!visited[v]){
+                q.offer(new int[]{v,w});
+                visited[v]=true;
+                }
+            }
+        }
+        return minDist;
+    }
+}
