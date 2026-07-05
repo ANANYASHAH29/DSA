@@ -1,0 +1,56 @@
+/* You are given a square board of characters. You can move on the board starting at the bottom right square marked with the character 'S'.
+You need to reach the top left square marked with the character 'E'. The rest of the squares are labeled either with a numeric character 1, 2, ..., 9 or with an obstacle 'X'. In one move you can go up, left or up-left (diagonally) only if there is no obstacle there.
+Return a list of two integers: the first integer is the maximum sum of numeric characters you can collect, and the second is the number of such paths that you can take to get that maximum sum, taken modulo 10^9 + 7.
+In case there is no path, return [0, 0].
+Example 1:
+Input: board = ["E23","2X2","12S"]
+Output: [7,1]
+Example 2:
+Input: board = ["E12","1X1","21S"]
+Output: [4,2]
+Example 3:
+Input: board = ["E11","XXX","11S"]
+Output: [0,0] */
+
+class Solution {
+    int MOD=1000000007;
+    public int[] pathsWithMaxScore(List<String> board) {
+        int n=board.size();
+        int[][] dp=new int[n][n];
+        int[][] ways=new int[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                dp[i][j]=-1;
+            }
+        }
+        dp[n-1][n-1]=0;
+        ways[n-1][n-1]=1;
+        for(int i=n-1;i>=0;i--){
+            for(int j=n-1;j>=0;j--){
+                int right=-1,down=-1,diag=-1;
+                if(i+1<n) down=dp[i+1][j];
+                if(j+1<n) right=dp[i][j+1];
+                if(i+1<n && j+1<n) diag=dp[i+1][j+1];
+                char ch=board.get(i).charAt(j);
+                int best=0;
+                if(ch=='S') continue;
+                if(ch!='X'){
+                    best=Math.max(Math.max(right,down),diag);
+                    if(best!=-1)
+                     if(ch!='E')
+                     dp[i][j]=best+(ch-'0');
+                     else dp[i][j]=best;
+                }
+                
+                ways[i][j]=0;
+                if(best==-1) continue;
+                if(j+1<n && right==best) ways[i][j]=(ways[i][j]+ways[i][j+1])%MOD;
+                if(i+1<n && down==best) ways[i][j]=(ways[i][j]+ways[i+1][j])%MOD;
+                if(i+1<n && j+1<n && diag==best) ways[i][j]=(ways[i][j]+ways[i+1][j+1])%MOD;
+            }
+        }
+        int first=(dp[0][0]==-1)?0:dp[0][0];
+        int second=ways[0][0];
+        return new int[]{first,second};
+    }
+}
